@@ -1,0 +1,5 @@
+__pycache__
+.vscode
+maps/*
+checked_ranges.txt
+map.png
