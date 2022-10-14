@@ -3,4 +3,4 @@ __pycache__
 maps/*
 checked_ranges.txt
 map.png
-*test*
+**/[Tt]est*
