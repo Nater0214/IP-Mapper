@@ -12,12 +12,22 @@ import image
 import threads
 from global_methods import flatten_iter, lazy_split, transpose_iter
 from ip import IP, ComplexIPrange, IPrange
+from typing_ import SettingsError
+
 
 # Settings
 PING_THREAD_AMOUNT = 4
 RESULT_THREAD_AMOUNT = 16
 LOAD_THREAD_AMOUNT = 32
 SAVE_THREAD_AMOUNT = 32
+
+
+# Check settings validity
+if LOAD_THREAD_AMOUNT > 64:
+    raise SettingsError("LOAD_THREAD_AMOUNT cannot be more than 64")
+
+if SAVE_THREAD_AMOUNT > 64:
+    raise SettingsError("SAVE_THREAD_AMOUNT cannot be more than 64")
 
 
 # Definitions
