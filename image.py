@@ -30,7 +30,7 @@ def get_pix_maps(imgs: list[PngImageFile], load_thread_amount: int) -> list[PyAc
 
     # Create stats thread
     stats_thrd = threads.StatsThread(load_thrds)
-    
+
     # Start threads
     stats_thrd.start()
     load_thrds.start()
@@ -44,7 +44,7 @@ def get_pix_maps(imgs: list[PngImageFile], load_thread_amount: int) -> list[PyAc
 
 def get_img_n_pix_maps(load_thread_amount: int) -> tuple[list[PngImageFile], list[PyAccess]]:
     """Return all image and pixel access objects
-    
+
     Short code for:
     >>> import img
     >>> imgs, pix_maps = img.get_images(), img.get_pix_maps()"""
