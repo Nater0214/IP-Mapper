@@ -3,7 +3,7 @@ from PIL import Image
 import threads
 from global_methods import lazy_split
 
-imgs = [Image.new(mode='RGB', size=(8192,8192)) for _ in range(64)]
+imgs = [Image.new(mode='RGB', size=(8192,8192), color=(18,18,18)) for _ in range(64)]
 
 # Create img ang out_num list
 imgs_n_out_nums = [(img, out_num+1) for out_num, img in enumerate(imgs)]
