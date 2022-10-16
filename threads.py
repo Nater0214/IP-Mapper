@@ -114,8 +114,8 @@ class LoadThread(ThreadWrap):
     """Creates a thread that loads images"""
 
     # Variables
-    imgs = [PngImageFile]
-    pix_maps = [PyAccess]
+    imgs = []
+    pix_maps = []
     loaded_num = 0
 
     # Init
@@ -147,8 +147,8 @@ class ResultsThread(ThreadWrap):
     """Creates a thread that saves results to an image reference"""
 
     # Variables
-    results = [(IP, bool)]
-    img_refs = [PyAccess]
+    results = []
+    img_refs = []
 
 
     # Init
@@ -171,7 +171,7 @@ class SaveThread(ThreadWrap):
     """Creates a thread that saves pixel maps to their designated images"""
 
     # Variables
-    imgs_n_out_nums = [(PngImageFile, int)]
+    imgs_n_out_nums = []
     saved_num = 0
 
 
@@ -195,7 +195,7 @@ class StatsThread(ThreadWrap):
     """Creates a thread that prints the current stats"""
 
     # Variables
-    thrds = [PingThread]
+    thrds = []
 
 
     # Init
