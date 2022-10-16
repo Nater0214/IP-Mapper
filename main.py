@@ -66,8 +66,8 @@ def main(settings: dict) -> None:
     stats_thrd = threads.StatsThread(ping_thrds)
 
     # Start threads
-    ping_thrds.start()
     stats_thrd.start()
+    ping_thrds.start()
     
     # Wait to end
     input()
