@@ -555,12 +555,12 @@ class ComplexIPrange:
 
             # If indexes are in same range return IPrange
             if start_range == stop_range:
-                return IPrange(self[start_index], self[stop_index], no_stop_sub_1=True)
+                return IPrange(start_range[start_index], stop_range[stop_index], no_stop_sub_1=True)
             
             # Else return complex range
             else:
                 # Create out list
-                out_ranges = []
+                out_ranges: list[IPrange] = []
 
                 # Append start range
                 out_ranges.append(start_range[start_index:])
@@ -571,6 +571,7 @@ class ComplexIPrange:
                 
                 # Append stop range
                 out_ranges.append(stop_range[:stop_index])
+                out_ranges[-1]._no_stop_sub_1 = True
 
                 return ComplexIPrange(out_ranges, trust_contain=True)
         
