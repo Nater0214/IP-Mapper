@@ -278,9 +278,7 @@ class StatsThread(ThreadWrap):
             time_elapsed = now - start
 
             # Print these values
-            print(f"Loaded {total}/64 images; {time_elapsed} elapsed")
-            
-            print()
+            print(f"Loaded 64/64 images; {time_elapsed} elapsed")
         
         elif self.thrd_cls == SaveThread:
             # Loading stats
@@ -311,8 +309,7 @@ class StatsThread(ThreadWrap):
             time_elapsed = now - start
 
             # Print these values
-            print(f"Saved {total}/64 images; {time_elapsed} elapsed")
-            print()
+            print(f"Saved 64/64 images; {time_elapsed} elapsed")
 
 
 class ThreadsList(list):
