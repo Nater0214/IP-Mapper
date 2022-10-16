@@ -14,11 +14,16 @@ imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, 32)
 # Create save threads
 save_thrds = threads.ThreadsList([threads.SaveThread(imgs_n_out_nums_sub, num+1) for num, imgs_n_out_nums_sub in enumerate(imgs_n_out_nums_subs)])
 
+# Create stats thread
+stats_thrd = threads.StatsThread(save_thrds)
+
 # Start threads
+stats_thrd.start()
 save_thrds.start()
 
 # Wait for threads to finish
 save_thrds.join()
+stats_thrd.end()
 
 # Reset checked ranges
 with open("checked_ranges.txt", 'wt') as file:
