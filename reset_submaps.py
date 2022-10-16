@@ -19,3 +19,7 @@ save_thrds.start()
 
 # Wait for threads to finish
 save_thrds.join()
+
+# Reset checked ranges
+with open("checked_ranges.txt", 'wt') as file:
+    file.write("None")
