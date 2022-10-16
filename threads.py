@@ -116,6 +116,7 @@ class LoadThread(ThreadWrap):
     # Variables
     imgs = [PngImageFile]
     pix_maps = [PyAccess]
+    loaded_num = 0
 
     # Init
     def __init__(self, imgs: list[PngImageFile], name_num: int) -> None:
@@ -134,6 +135,7 @@ class LoadThread(ThreadWrap):
         pix_maps = []
         for img in self.imgs:
             pix_maps.append(img.load())
+            self.loaded_num += 1
 
             if self.is_end:
                 break
@@ -170,6 +172,7 @@ class SaveThread(ThreadWrap):
 
     # Variables
     imgs_n_out_nums = [(PngImageFile, int)]
+    saved_num = 0
 
 
     # Init
@@ -182,6 +185,7 @@ class SaveThread(ThreadWrap):
     def main(self) -> None:
         for img, out_num in self.imgs_n_out_nums:
             image.save(img, out_num)
+            self.saved_num += 1
 
             if self.is_end:
                 break
@@ -196,47 +200,119 @@ class StatsThread(ThreadWrap):
 
     # Init
     def __init__(self, thrds: ThreadsList[PingThread] | ThreadsList[LoadThread] | ThreadsList[SaveThread]) -> None:
+        if not all_same_type(thrds):
+            raise TypeError("Threads must all be same type")
+        
+        super().__init__(f"StatsThread-{thrds[0].__class__.__name__}")
         self.thrds = thrds
+        self.thrd_cls = thrds[0].__class__
     
     
     # Function to be executed
     def main(self) -> None:
-        # Set starting time
-        start = datetime.now()
-        start = start.replace(microsecond=0)
-        thrds = self.thrds
-        finished = False
+        if self.thrd_cls == PingThread:
+            # Ping stats
 
-        # Stats loop
-        while not self.is_end:
-            # Get stats values
-            total = sum(thrd.total_pinged for thrd in thrds)
-            for thrd in thrds:
-                if thrd.is_finished:
-                    finished = True
+            # Set starting time
+            start = datetime.now()
+            start = start.replace(microsecond=0)
+
+            finished = False
+
+            # Stats loop
+            while not self.is_end:
+                # Get stats values
+                total = sum(thrd.total_pinged for thrd in self.thrds)
+
+                # Get elapsed time
+                now = datetime.now()
+                now = now.replace(microsecond=0)
+                time_elapsed = now - start
+
+                # Print these values
+                print(f"Pinged {total} ips in {time_elapsed}; ", end='')
+                if finished:
+                    print("A thread has finished!; ", end='')
+                try:
+                    print(f"{int(total // time_elapsed.total_seconds())} ips/sec; ", end='')
+                except ZeroDivisionError:
+                    print("0 ips/sec; ", end='')
+                try:
+                    print(f"{int(total // (time_elapsed.total_seconds() / 60))} ips/min; ", end='')
+                except ZeroDivisionError:
+                    print("0 ips/min; ", end='')
+                try:
+                    print(f"{int(total // (time_elapsed.total_seconds() / 3600))} ips/hour; ", end='\r')
+                except ZeroDivisionError:
+                    print("0 ips/hour; ", end='\r')
+
+                # Delay
+                sleep(0.2)
             
+        elif self.thrd_cls == LoadThread:
+            # Loading stats
+
+            # Set starting time
+            start = datetime.now()
+            start = start.replace(microsecond=0)
+
+            # Stats loop
+            while not self.is_end:
+                # Get stats values
+                total = sum(thrd.loaded_num for thrd in self.thrds)
+
+                # Get elapsed time
+                now = datetime.now()
+                now = now.replace(microsecond=0)
+                time_elapsed = now - start
+
+                # Print these values
+                print(f"Loaded {total}/64 images; {time_elapsed} elapsed", end='\r')
+
+                # Delay
+                sleep(0.2)
+            
+            # Get elapsed time
             now = datetime.now()
             now = now.replace(microsecond=0)
             time_elapsed = now - start
 
             # Print these values
-            print(f"Pinged {total} ips in {time_elapsed}; ", end='')
-            if finished:
-                print("A thread has finished!; ", end='')
-            try:
-                print(f"{int(total // time_elapsed.total_seconds())} ips/sec; ", end='')
-            except ZeroDivisionError:
-                print("0 ips/sec; ", end='')
-            try:
-                print(f"{int(total // (time_elapsed.total_seconds() / 60))} ips/min; ", end='')
-            except ZeroDivisionError:
-                print("0 ips/min; ", end='')
-            try:
-                print(f"{int(total // (time_elapsed.total_seconds() / 3600))} ips/hour; ", end='\r')
-            except ZeroDivisionError:
-                print("0 ips/hour; ", end='\r')
+            print(f"Loaded {total}/64 images; {time_elapsed} elapsed")
             
-            sleep(0.1)
+            print()
+        
+        elif self.thrd_cls == SaveThread:
+            # Loading stats
+
+            # Set starting time
+            start = datetime.now()
+            start = start.replace(microsecond=0)
+
+            # Stats loop
+            while not self.is_end:
+                # Get stats values
+                total = sum(thrd.saved_num for thrd in self.thrds)
+
+                # Get elapsed time
+                now = datetime.now()
+                now = now.replace(microsecond=0)
+                time_elapsed = now - start
+
+                # Print these values
+                print(f"Saved {total}/64 images; {time_elapsed} elapsed", end='\r')
+
+                # Delay
+                sleep(0.2)
+            
+            # Get elapsed time
+            now = datetime.now()
+            now = now.replace(microsecond=0)
+            time_elapsed = now - start
+
+            # Print these values
+            print(f"Saved {total}/64 images; {time_elapsed} elapsed")
+            print()
 
 
 class ThreadsList(list):

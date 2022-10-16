@@ -78,6 +78,7 @@ def main() -> None:
     results_thrds = threads.ThreadsList([threads.ResultsThread(result_sub, pix_maps, num+1) for num, result_sub in enumerate(results_subs)])
 
     # Start threads
+    print("Pasting results to images...")
     results_thrds.start()
 
     # Wait for threads to finish
@@ -92,11 +93,16 @@ def main() -> None:
     # Create save threads
     save_thrds = threads.ThreadsList([threads.SaveThread(imgs_n_out_nums_sub, num+1) for num, imgs_n_out_nums_sub in enumerate(imgs_n_out_nums_subs)])
 
+    # Create stats thread
+    stats_thrd = threads.StatsThread(save_thrds)
+
     # Start threads
+    stats_thrd.start()
     save_thrds.start()
 
     # Wait for threads to finish
     save_thrds.join()
+    stats_thrd.end()
 
     with open("checked_ranges.txt", 'wt') as file:
         file.write(repr(ComplexIPrange(pinged_range.ranges + (checked_ranges.ranges if checked_ranges != None else []))))

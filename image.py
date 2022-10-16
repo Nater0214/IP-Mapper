@@ -28,11 +28,18 @@ def get_pix_maps(imgs: list[PngImageFile], load_thread_amount: int) -> list[PyAc
     # Create load threads
     load_thrds = threads.ThreadsList([threads.LoadThread(imgs_sub, num+1) for num, imgs_sub in enumerate(imgs_subs)])
 
+    # Create stats thread
+    stats_thrd = threads.StatsThread(load_thrds)
+    
     # Start threads
+    stats_thrd.start()
     load_thrds.start()
 
     # Get thread result and return
-    return flatten_iter(load_thrds.join())
+    out = flatten_iter(load_thrds.join())
+    stats_thrd.end()
+    stats_thrd.join()
+    return out
 
 
 def get_img_n_pix_maps(load_thread_amount: int) -> tuple[list[PngImageFile], list[PyAccess]]:
