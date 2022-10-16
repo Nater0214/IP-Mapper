@@ -5,6 +5,7 @@
 # WARNING: This program will eat your cpu and ram when saving
 
 # Imports
+import json
 from functools import reduce
 from operator import concat
 
@@ -15,23 +16,31 @@ from ip import IP, ComplexIPrange, IPrange
 from typing_ import SettingsError
 
 
-# Settings
-PING_THREAD_AMOUNT = 4
-RESULT_THREAD_AMOUNT = 16
-LOAD_THREAD_AMOUNT = 32
-SAVE_THREAD_AMOUNT = 32
-
-
-# Check settings validity
-if LOAD_THREAD_AMOUNT > 64:
-    raise SettingsError("LOAD_THREAD_AMOUNT cannot be more than 64")
-
-if SAVE_THREAD_AMOUNT > 64:
-    raise SettingsError("SAVE_THREAD_AMOUNT cannot be more than 64")
-
-
 # Definitions
-def main() -> None:
+def load_settings() -> dict:
+    """Load the settings from the json"""
+
+    # Get json data
+    with open("settings.json", 'rt') as file:
+        json_data = json.load(file)
+    
+    # Return settings
+    if json_data["default_settings"]:
+        return json_data["default"]
+    else:
+        return json_data["user_defined"]
+
+
+def main(settings: dict) -> None:
+    """Main"""
+
+    # Set thread amounts
+    thread_amounts = settings["thread_amounts"]
+    ping_thread_amount = thread_amounts["ping_thread_amount"]
+    load_thread_amount = thread_amounts["load_thread_amount"]
+    result_thread_amount = thread_amounts["result_thread_amount"]
+    save_thread_amount = thread_amounts["save_thread_amount"]
+
     # Get last checked ips
     with open("checked_ranges.txt", 'rt') as file:
         try:
@@ -45,7 +54,7 @@ def main() -> None:
         ping_range = checked_ranges.inverted()
     
     # Divide up ranges
-    ranges = lazy_split(ping_range, PING_THREAD_AMOUNT)
+    ranges = lazy_split(ping_range, ping_thread_amount)
 
     # Create ping threads
     ping_thrds = threads.ThreadsList([threads.PingThread(range_, num+1) for num, range_ in enumerate(ranges)])
@@ -69,10 +78,10 @@ def main() -> None:
     pinged_range = ComplexIPrange(pinged_range)
 
     # Divide up results
-    results_subs = lazy_split(results, RESULT_THREAD_AMOUNT)
+    results_subs = lazy_split(results, result_thread_amount)
 
     # Get images and pix_maps
-    imgs, pix_maps = image.get_img_n_pix_maps(LOAD_THREAD_AMOUNT)
+    imgs, pix_maps = image.get_img_n_pix_maps(load_thread_amount)
 
     # Create results threads
     results_thrds = threads.ThreadsList([threads.ResultsThread(result_sub, pix_maps, num+1) for num, result_sub in enumerate(results_subs)])
@@ -88,7 +97,7 @@ def main() -> None:
     imgs_n_out_nums = [(img, out_num+1) for out_num, img in enumerate(imgs)]
 
     # Divide up list
-    imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, SAVE_THREAD_AMOUNT)
+    imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, save_thread_amount)
 
     # Create save threads
     save_thrds = threads.ThreadsList([threads.SaveThread(imgs_n_out_nums_sub, num+1) for num, imgs_n_out_nums_sub in enumerate(imgs_n_out_nums_subs)])
@@ -110,4 +119,5 @@ def main() -> None:
 
 # Run
 if __name__ == "__main__":
-    main()
+    settings = load_settings()
+    main(settings)

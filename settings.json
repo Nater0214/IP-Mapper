@@ -1,0 +1,20 @@
+{
+    "default_settings": true,
+    "default": {
+        "thread_amounts": {
+            "ping_thread_amount": 8,
+            "load_thread_amount": 32,
+            "result_thread_amount": 2,
+            "save_thread_amount": 32
+        }
+    },
+
+    "user_defined": {
+        "thread_amounts": {
+            "ping_thread_amount": 16,
+            "load_thread_amount": 64,
+            "result_thread_amount": 2,
+            "save_thread_amount": 64
+        }
+    }
+}
