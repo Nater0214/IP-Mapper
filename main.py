@@ -42,11 +42,14 @@ def main(settings: dict) -> None:
     save_thread_amount = thread_amounts["save_thread_amount"]
 
     # Get last checked ips
-    with open("checked_ranges.txt", 'rt') as file:
-        try:
-            checked_ranges: ComplexIPrange = eval(file.read())
-        except SyntaxError:
-            checked_ranges = None
+    try:
+        with open("checked_ranges.txt", 'rt') as file:
+            try:
+                checked_ranges: ComplexIPrange = eval(file.read())
+            except SyntaxError:
+                checked_ranges = None
+    except FileNotFoundError:
+        checked_ranges = None
     
     if checked_ranges == None:
         ping_range = IPrange(IP(0, 0, 0, 0), IP(255, 255, 255, 255), no_stop_sub_1=True)
