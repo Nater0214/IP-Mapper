@@ -243,7 +243,7 @@ class ThreadsList(list):
     """Special immutable list of threads that can act on itself easily"""
 
     # List methods
-    def __init__(self, thrds: list[ThreadWrap] | list[ThreadWrap]):
+    def __init__(self, thrds: list[Thread] | list[ThreadWrap]):
         # Make sure every thrd is a thread
         for thrd in thrds:
             if isntinstance(thrd, Thread):
