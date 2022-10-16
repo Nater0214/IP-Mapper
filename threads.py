@@ -3,7 +3,8 @@
 
 
 # Imports
-from collections.abc import Iterable
+from __future__ import annotations
+
 from datetime import datetime
 from threading import Thread
 from time import sleep
@@ -194,8 +195,7 @@ class StatsThread(ThreadWrap):
 
 
     # Init
-    def __init__(self, thrds: list[PingThread]) -> None:
-        super().__init__("StatsThread")
+    def __init__(self, thrds: ThreadsList[PingThread] | ThreadsList[LoadThread] | ThreadsList[SaveThread]) -> None:
         self.thrds = thrds
     
     
