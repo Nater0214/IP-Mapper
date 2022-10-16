@@ -3,8 +3,8 @@
 
 
 # Imports
-from PIL import Image # Ima write this comment here to actually see if you pay attention to what i send you lol
-from listb1 import Listb1 # If u do then say pickle
+from PIL import Image
+from listb1 import Listb1
 
 
 # Run
