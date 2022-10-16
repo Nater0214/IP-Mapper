@@ -81,8 +81,8 @@ class PingThread(ThreadWrap):
         if isntinstance(ip_range, (IPrange, ComplexIPrange)):
             raise TypeError(f"ip range must be of type IPrange or ComplexIPrange, not {ip_range.__class__.__name__}")
         
-        self.check_range = ip_range
         super().__init__(f"PingThread-{name_num}")
+        self.check_range = ip_range
     
 
     # Thread methods
@@ -120,8 +120,8 @@ class LoadThread(ThreadWrap):
 
     # Init
     def __init__(self, imgs: list[PngImageFile], name_num: int) -> None:
-        self.imgs = imgs
         super().__init__(f"LoadThread-{name_num}")
+        self.imgs = imgs
     
 
     # Thread methods
