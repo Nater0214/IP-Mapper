@@ -4,3 +4,5 @@ maps/*
 checked_ranges.txt
 map.png
 **/[Tt]est*
+listb1.py
+coord_to_ip.py
