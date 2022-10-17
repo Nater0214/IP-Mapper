@@ -621,6 +621,6 @@ class ComplexIPrange:
             out_ranges.append(IPrange(range1[-1]+1, range2[0]))
         
         if self._ranges[-1][-1] != IP(255,255,255,255):
-            out_ranges.append(IPrange(self.ranges[-1][-1]+1, IP(255,255,255,255), no_stop_sub_1=True))
+            out_ranges.append(IPrange(self._ranges[-1][-1]+1, IP(255,255,255,255), no_stop_sub_1=True))
         
         return ComplexIPrange(out_ranges, trust_contain=True)
