@@ -586,7 +586,7 @@ class ComplexIPrange:
                 return new_ranges
         
         new_ranges = _(self._ranges)
-        prev_new_ranges = [None]
+        prev_new_ranges = self._ranges
         while new_ranges != prev_new_ranges:
             prev_new_ranges = new_ranges
             new_ranges = _(new_ranges)
