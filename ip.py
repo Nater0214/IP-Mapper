@@ -226,16 +226,7 @@ class IP:
             if isntinstance(other, IP):
                 raise TypeError
             
-            if self['c'] > other['c']:
-                return False
-            elif self['d'] > other['d']:
-                return False
-            elif self['a'] > other['a']:
-                return False
-            elif self['b'] >= other['b']:
-                return False
-            else:
-                return True
+            return self.to_index < other.to_index
 
         except TypeError:
             return False
@@ -250,16 +241,7 @@ class IP:
             if isntinstance(other, IP):
                 raise TypeError
         
-            if self['c'] < other['c']:
-                return False
-            elif self['d'] < other['d']:
-                return False
-            elif self['a'] < other['a']:
-                return False
-            elif self['b'] <= other['b']:
-                return False
-            else:
-                return True
+            return self.to_index > other.to_index
 
         except TypeError:
             return False
