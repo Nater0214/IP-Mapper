@@ -399,7 +399,7 @@ class ComplexIPrange:
     _ranges = []
     
     # Init
-    def __init__(self, ranges: list[IPrange], trust_contain: bool = False) -> None:
+    def __init__(self, ranges: list[IPrange]) -> None:
         # Raise exception if any range is not an IPrange
         for range_ in ranges:
             if isntinstance(range_, IPrange):
@@ -412,15 +412,12 @@ class ComplexIPrange:
                 self._ranges.append(range_)
             
             else:
-                if trust_contain:
-                    self._ranges.append(range_)
-                elif range_[0] in self or range_[-1] in self or self[0] in range_ or self[-1] in range_:
+                if range_[0] in self or range_[-1] in self or self[0] in range_ or self[-1] in range_:
                     raise IPValueError("Ranges cannot contain each other or parts of each other")
                 else:
                     self._ranges.append(range_)
         
-        if not trust_contain:
-            self._ranges = sorted(self._ranges, key=lambda r: r[0])
+        self._ranges = sorted(self._ranges, key=lambda r: r[0])
         
         self._merge()
 
