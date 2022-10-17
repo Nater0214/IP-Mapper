@@ -336,10 +336,10 @@ class IPrange:
         if isinstance(other, int): # Return IP at index
             # Support negative indexing
             if other < 0:
-                other = len(self) + other
+                other = len(self) + other + (1 if not self._no_stop_sub_1 else 0)
 
             # Raise exception if index is out of range
-            if other > len(self) - 1:
+            if other > len(self) - 1 + (1 if not self._no_stop_sub_1 else 0):
                 raise IndexError(f"Index out of range: {other}")
             if other < 0:
                 raise IndexError(f"Index out of range: {other - len(self)}")
