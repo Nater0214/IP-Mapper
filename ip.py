@@ -552,6 +552,14 @@ class ComplexIPrange:
         
         else:
             raise IndexError(f"Unsupported index type for ComplexIPrange: {other.__class__.__name__}")
+    
+
+    def __contains__(self, other: IP) -> bool:
+        # Other must be an IP
+        if isntinstance(other, IP):
+            raise TypeError(f"IPrange can only check for IP inside of itself, not {other.__class__.__name__}")
+       
+        return any([other in range_ for range_ in self._ranges])
 
 
     def __len__(self) -> int:
