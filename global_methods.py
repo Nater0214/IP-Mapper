@@ -116,10 +116,13 @@ def all_same_type(iter_: Iterable[Any]) -> bool:
     return all_equal(types)
 
 
-def iter_2_items(iter_: Iterable[Any]) -> tuple[Any, Any]:
+def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> tuple[Any, Any]:
     """
     Generates an iterable that returns an item and the item directly after it
     """
     
     for i in range(len(iter_) - 1):
         yield iter_[i], iter_[i+1]
+    
+    if return_last:
+        yield iter_[-1], None
