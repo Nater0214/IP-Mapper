@@ -545,7 +545,7 @@ class ComplexIPrange:
                 out_ranges.append(stop_range[:stop_index])
                 out_ranges[-1]._no_stop_sub_1 = last_ip
 
-                return ComplexIPrange(out_ranges, trust_contain=True)
+                return ComplexIPrange(out_ranges)
         
         else:
             raise IndexError(f"Unsupported index type for ComplexIPrange: {other.__class__.__name__}")
@@ -607,4 +607,4 @@ class ComplexIPrange:
         if self._ranges[-1][-1] != IP(255,255,255,255):
             out_ranges.append(IPrange(self._ranges[-1][-1]+1, IP(255,255,255,255), no_stop_sub_1=True))
         
-        return ComplexIPrange(out_ranges, trust_contain=True)
+        return ComplexIPrange(out_ranges)
