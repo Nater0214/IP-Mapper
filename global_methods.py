@@ -124,6 +124,7 @@ def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> tuple[Any, 
     i = 0
     while i < len(iter_) - 1:
         yield iter_[i], iter_[i+1]
+        i += 1
     
     if return_last:
         yield iter_[-1], None
