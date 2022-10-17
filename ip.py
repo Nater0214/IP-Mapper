@@ -569,24 +569,26 @@ class ComplexIPrange:
     def _merge(self) -> None:
         """Merges subranges that are directly next to each other"""
 
-        def _() -> list[IPrange]:
-            new_ranges = []
-            skip_next = False
-            for range1, range2 in iter_2_items(self._ranges):
-                if not skip_next:
-                    if range1[-1] == range2[0]:
-                        new_ranges.append(IPrange(range1[0], range2[-1]))
-                        skip_next = True
-                else:
-                    skip_next = False
+        def _(old_ranges: list[IPrange]) -> list[IPrange]:
+            if len(old_ranges) == 1:
+                return old_ranges
             
-            return new_ranges
+            else:
+                new_ranges = []
+                for range1, range2 in iter_2_items(old_ranges):
+                    if range1[-1] + 1 == range2[0]:
+                        new_ranges.append(IPrange(range1[0], range2[-1]))
+                        old_ranges.remove(range2)
+                    else:
+                        new_ranges.append(range1)
+            
+                return new_ranges
         
-        new_ranges = []
-        prev_new_ranges = new_ranges
+        new_ranges = _(self._ranges)
+        prev_new_ranges = [None]
         while new_ranges != prev_new_ranges:
             prev_new_ranges = new_ranges
-            new_ranges = _()
+            new_ranges = _(new_ranges)
         
         self._ranges = new_ranges
 
