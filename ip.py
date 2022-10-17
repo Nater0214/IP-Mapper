@@ -11,7 +11,7 @@ from typing import Any
 
 from multipledispatch import dispatch
 
-from global_methods import isntinstance
+from global_methods import isntinstance, iter_2_items
 from typing_ import IPOverflowError, IPValueError, OctetIndexError
 
 
@@ -617,11 +617,8 @@ class ComplexIPrange:
         if self._ranges[0][0] != IP(0,0,0,0):
             out_ranges.append(IPrange(IP(0,0,0,0), self._ranges[0][0]))
 
-        for i in range(len(self._ranges)):
-            if i+1 < len(self._ranges):
-                out_ranges.append(IPrange(self._ranges[i][-1]+1, self._ranges[i+1][0]))
-            else:
-                break
+        for range1, range2 in iter_2_items(self._ranges):
+            out_ranges.append(IPrange(range1[-1]+1, range2[0]))
         
         if self._ranges[-1][-1] != IP(255,255,255,255):
             out_ranges.append(IPrange(self.ranges[-1][-1]+1, IP(255,255,255,255), no_stop_sub_1=True))
