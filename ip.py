@@ -9,8 +9,6 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Any
 
-from multipledispatch import dispatch
-
 from global_methods import isntinstance, iter_2_items
 from typing_ import IPOverflowError, IPValueError, OctetIndexError
 
