@@ -448,6 +448,8 @@ class ComplexIPrange:
         
         if not trust_contain:
             self._ranges = sorted(self._ranges, key=lambda r: r[0])
+        
+        self._merge()
 
 
     # Properties and similar methods
@@ -581,6 +583,31 @@ class ComplexIPrange:
 
     def __len__(self) -> int:
         return sum([len(range_) for range_ in self._ranges])
+    
+
+    def _merge(self) -> None:
+        """Merges subranges that are directly next to each other"""
+
+        def _() -> list[IPrange]:
+            new_ranges = []
+            skip_next = False
+            for range1, range2 in iter_2_items(self._ranges):
+                if not skip_next:
+                    if range1[-1] == range2[0]:
+                        new_ranges.append(IPrange(range1[0], range2[-1]))
+                        skip_next = True
+                else:
+                    skip_next = False
+            
+            return new_ranges
+        
+        new_ranges = []
+        prev_new_ranges = new_ranges
+        while new_ranges != prev_new_ranges:
+            prev_new_ranges = new_ranges
+            new_ranges = _()
+        
+        self._ranges = new_ranges
 
 
     def inverted(self) -> ComplexIPrange:
