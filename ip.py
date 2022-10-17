@@ -414,6 +414,14 @@ class IPrange:
             raise IndexError(f"Unsupported index type for IPrange: {other.__class__.__name__}")
     
 
+    def __contains__(self, other: IP) -> bool:
+        # Other must be an IP
+        if isntinstance(other, IP):
+            raise TypeError(f"IPrange can only check for IP inside of itself, not {other.__class__.__name__}")
+        
+        return self[0] <= other <= self[-1]
+    
+
     def __len__(self) -> int:
         return (self._stop_ip - self._start_ip) + int(self._no_stop_sub_1)
         
