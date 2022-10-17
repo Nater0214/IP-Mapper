@@ -44,7 +44,7 @@ class IP:
         return IP(0,0,0,0) + index
 
     
-    # Return methods
+    # Properties and similar methods
     def __iter__(self) -> Iterable:
         return iter((self.a, self.b, self.c, self.d))
     
@@ -69,6 +69,11 @@ class IP:
             return self.d
         else:
             raise OctetIndexError(f"Invalid octet: {octet}")
+    
+
+    @property
+    def to_index(self) -> int:
+        return self.b + self.a*256 + self.d*256**2 + self.c*256**3
     
 
     # Arithmetic operations
