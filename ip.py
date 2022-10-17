@@ -247,7 +247,7 @@ class IP:
                 return False
             elif self['a'] > other['a']:
                 return False
-            elif self['b'] > other['b']:
+            elif self['b'] >= other['b']:
                 return False
             else:
                 return True
@@ -271,7 +271,7 @@ class IP:
                 return False
             elif self['a'] < other['a']:
                 return False
-            elif self['b'] < other['b']:
+            elif self['b'] <= other['b']:
                 return False
             else:
                 return True
