@@ -572,10 +572,14 @@ class ComplexIPrange:
             
             else:
                 new_ranges = []
-                for range1, range2 in iter_2_items(old_ranges):
-                    if range1[-1] + 1 == range2[0]:
+                for range1, range2 in iter_2_items(old_ranges, True):
+                    if range2 == None:
+                        new_ranges.append(range1)
+                    
+                    elif range1[-1] + 1 == range2[0]:
                         new_ranges.append(IPrange(range1[0], range2[-1]))
                         old_ranges.remove(range2)
+                    
                     else:
                         new_ranges.append(range1)
             
