@@ -21,25 +21,6 @@ class IP:
 
     # Init
     def __init__(self, a: int, b: int, c: int, d: int, *, force_create=False) -> None:
-        """
-        Usage:
-        >>> ip = IP(0,0,0,0)
-
-        >>> str(ip)
-        '0.0.0.0'
-
-        >>> ip + 1
-        IP(0,1,0,0)
-
-        >>> ip += 256
-
-        >>> ip - 128
-        IP(0,128,0,0)
-
-        >>> ip - IP(0,64,0,0)
-        64
-        """
-        
         # Set values
         self.a, self.b, self.c, self.d = a, b, c, d
 
