@@ -432,8 +432,8 @@ class ComplexIPrange:
             if isntinstance(range_, IPrange):
                 raise TypeError(f"Range type must be IPrange, not {range_.__class__.__name__}")
         
-        self._ranges = []
         # Add ranges one-by-one and check if any contain each other
+        self._ranges = []
         for range_ in ranges:
             if self._ranges == []:
                 self._ranges.append(range_)
@@ -611,7 +611,7 @@ class ComplexIPrange:
 
 
     def inverted(self) -> ComplexIPrange:
-        """Invert the ranges to every ip that is not in this range"""
+        """Returns an inverted range that includes every ip not in the existing range"""
 
         out_ranges = []
         if self._ranges[0][0] != IP(0,0,0,0):
