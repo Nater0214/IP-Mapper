@@ -121,7 +121,8 @@ def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> tuple[Any, 
     Generates an iterable that returns an item and the item directly after it
     """
     
-    for i in range(len(iter_) - 1):
+    i = 0
+    while i < len(iter_) - 1:
         yield iter_[i], iter_[i+1]
     
     if return_last:
