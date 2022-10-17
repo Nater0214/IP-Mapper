@@ -42,7 +42,6 @@ class IP:
         
         # Set values
         self.a, self.b, self.c, self.d = a, b, c, d
-        self.IP = IP
 
         # Validate Values
         if not force_create:
