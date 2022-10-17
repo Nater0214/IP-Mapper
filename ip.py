@@ -39,7 +39,7 @@ class IP:
                 raise ValueError("IP octet value must be in range: 0-255")
     
 
-    @classmethod
+    @staticmethod
     def from_index(cls, index: int) -> IP:
         return IP(0,0,0,0) + index
 
