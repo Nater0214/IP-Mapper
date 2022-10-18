@@ -81,7 +81,7 @@ class IP:
         if isinstance(other, int):
             # Raise error if other is negative
             if other < 0:
-                raise ValueError(f"IP cannot add negative numbers. Try to use subtraction instead. ({other})")
+                return self - -other
             
             # Get octet values
             a, b, c, d = self.a, self.b, self.c, self.d
@@ -140,7 +140,7 @@ class IP:
         if isinstance(other, int): # Returns an IP with a lowered value by other
             # Raise error if other is negative
             if other < 0:
-                raise ValueError(f"IP cannot subtract negative numbers. Try to use addition instead. ({other})")
+                return self + -other
             
             # Get octet values
             a, b, c, d = self.a, self.b, self.c, self.d
