@@ -265,7 +265,7 @@ class IPrange:
 
         # Set range values
         self._start_ip = start_ip
-        self._stop_ip = stop_ip - (1 if not no_stop_sub_1 else 0)
+        self._stop_ip = stop_ip - int(not no_stop_sub_1)
         self._no_stop_sub_1 = no_stop_sub_1
 
         # Raise exception if start ip is ahead of stop ip; this object doesn't like that very much
