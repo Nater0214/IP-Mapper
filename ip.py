@@ -45,6 +45,11 @@ class IP:
 
     
     # Properties and similar methods
+    @property
+    def to_index(self) -> int:
+        return self.b + self.a*256 + self.d*256**2 + self.c*256**3
+
+
     def __iter__(self) -> Iterable:
         return iter((self.a, self.b, self.c, self.d))
     
@@ -69,11 +74,6 @@ class IP:
             return self.d
         else:
             raise OctetIndexError(f"Invalid octet: {octet}")
-    
-
-    @property
-    def to_index(self) -> int:
-        return self.b + self.a*256 + self.d*256**2 + self.c*256**3
     
 
     # Arithmetic operations
@@ -334,18 +334,21 @@ class IPrange:
 
     # List-like methods
     def __getitem__(self, other: int | slice) -> IP | IPrange:
-        if isinstance(other, int): # Return IP at index
-            # Support negative indexing
-            if other < 0:
-                other = len(self) + other + (1 if not self._no_stop_sub_1 else 0)
+        # Return IP at index
+        if isinstance(other, int):
+            # Positive index
+            if other >= 0:
+                if other > len(self) - 1:
+                    raise IndexError(f"Index out of range: {other}")
+                
+                return self._start_ip + other
+            
+            # Negative index
+            elif other < 0:
+                if other < -len(self):
+                    raise IndexError(f"Index out of range: {other}")
 
-            # Raise exception if index is out of range
-            if other > len(self) - 1 + (1 if not self._no_stop_sub_1 else 0):
-                raise IndexError(f"Index out of range: {other}")
-            if other < 0:
-                raise IndexError(f"Index out of range: {other - len(self)}")
-
-            return self._start_ip + other
+                return self.stop_ip + other + 1
         
         elif isinstance(other, slice): # Return IPrange with indexes
             # Raise exception if slice has step; It doesn't work
@@ -363,13 +366,6 @@ class IPrange:
                     last_ip = False
             else:
                 last_ip = False
-                
-
-            # Support negative indexing
-            if start_index < 0:
-                start_index = len(self) + start_index
-            if stop_index < 0:
-                stop_index = len(self) + stop_index
 
             # Raise exception if slice is a reverse slice; It also doesn't work
             if start_index > stop_index:
@@ -391,7 +387,7 @@ class IPrange:
     
 
     def __len__(self) -> int:
-        return (self._stop_ip - self._start_ip) + int(self._no_stop_sub_1)
+        return self._stop_ip - self._start_ip + 1
         
 
 class ComplexIPrange:
@@ -469,7 +465,7 @@ class ComplexIPrange:
                 if other > (len_ := len(range_)) - 1: # I <3 walrus operator. I rarely get to use it so im happy :D
                     other -= len_
                 else:
-                    return range_[other]
+                    return range_[other] 
 
         elif isinstance(other, slice):
             # Raise exception if slice has step; It doesn't work
@@ -528,7 +524,7 @@ class ComplexIPrange:
 
             # If indexes are in same range return IPrange
             if start_range == stop_range:
-                return IPrange(start_range[start_index], stop_range[stop_index], no_stop_sub_1=last_ip)
+                return IPrange(start_range[start_index], stop_range[stop_index], no_stop_sub_1=True)
             
             # Else return complex range
             else:
@@ -561,7 +557,7 @@ class ComplexIPrange:
 
 
     def __len__(self) -> int:
-        return sum([len(range_) for range_ in self._ranges])
+        return sum(len(range_) for range_ in self._ranges)
     
 
     def _merge(self) -> None:
@@ -578,7 +574,8 @@ class ComplexIPrange:
                         new_ranges.append(range1)
                     
                     elif range1[-1] + 1 == range2[0]:
-                        new_ranges.append(IPrange(range1[0], range2[-1]))
+                        new_ranges.append(IPrange(range1[0], range2[-1], no_stop_sub_1=True))
+                        old_ranges.remove(range1)
                         old_ranges.remove(range2)
                     
                     else:
