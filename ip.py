@@ -40,7 +40,7 @@ class IP:
     
 
     @staticmethod
-    def from_index(cls, index: int) -> IP:
+    def from_index(index: int) -> IP:
         return IP(0,0,0,0) + index
 
     
