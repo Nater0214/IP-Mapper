@@ -288,12 +288,13 @@ class IPrange:
         return f"IPrange({repr(self._start_ip)}, {repr(self._stop_ip + (1 if not self._no_stop_sub_1 else 0))}{', no_stop_sub_1=True' if self._no_stop_sub_1 else ''})"
     
 
+    # Comparison
     def __eq__(self, other: IPrange) -> bool:
         try:
             if isntinstance(other, IPrange):
                 raise TypeError
             
-            return (self._start_ip == other._start_ip) and (self._stop_ip == other._stop_ip)
+            return (self._start_ip == other._start_ip) and (self._stop_ip == other._stop_ip) and (self._no_stop_sub_1 == other._no_stop_sub_1)
         
         except TypeError:
             return False
@@ -304,10 +305,10 @@ class IPrange:
             if isntinstance(other, IPrange):
                 raise TypeError
             
-            return (self._start_ip != other._start_ip) and (self._stop_ip != other._stop_ip)
+            return (self._start_ip != other._start_ip) and (self._stop_ip != other._stop_ip) and (self._no_stop_sub_1 != other._no_stop_sub_1)
         
         except TypeError:
-            return False
+            return True
     
 
     # Iteration methods
