@@ -358,21 +358,13 @@ class IPrange:
             # Get start and end indexes from slice object
             start_index = other.start if other.start != None else 0
             stop_index = other.stop - 1 if other.stop != None else len(self) - 1
-            if stop_index == len(self):
-                if self[stop_index-1] == IP(255,255,255,255):
-                    stop_index -= 1
-                    last_ip = True
-                else:
-                    last_ip = False
-            else:
-                last_ip = False
 
             # Raise exception if slice is a reverse slice; It also doesn't work
             if start_index > stop_index:
                 raise IndexError("IPrange does not support reverse slicing")
             
             # Return IPrange with indexes
-            return IPrange(self[start_index], self[stop_index] + int(not self._no_stop_sub_1), no_stop_sub_1=last_ip)
+            return IPrange(self[start_index], self[stop_index], no_stop_sub_1=True)
         
         else:
             raise IndexError(f"Unsupported index type for IPrange: {other.__class__.__name__}")
@@ -539,7 +531,7 @@ class ComplexIPrange:
                     out_ranges.append(self._ranges[range_index])
                 
                 # Append stop range
-                out_ranges.append(stop_range[:stop_index])
+                out_ranges.append(stop_range[:stop_index+1])
                 out_ranges[-1]._no_stop_sub_1 = last_ip
 
                 return ComplexIPrange(out_ranges)
