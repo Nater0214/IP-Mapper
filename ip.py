@@ -285,7 +285,7 @@ class IPrange:
     
 
     def __repr__(self) -> str:
-        return f"IPrange({repr(self._start_ip)}, {repr(self._stop_ip + (1 if not self._no_stop_sub_1 else 0))}{', no_stop_sub_1=True' if self._no_stop_sub_1 else ''})"
+        return f"IPrange({repr(self._start_ip)}, {repr(self._stop_ip + int(not self._no_stop_sub_1))}{', no_stop_sub_1=True' if self._no_stop_sub_1 else ''})"
     
 
     # Comparison
