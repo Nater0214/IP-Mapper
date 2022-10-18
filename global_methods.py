@@ -127,4 +127,7 @@ def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> tuple[Any, 
         i += 1
     
     if return_last:
-        yield iter_[-1], None
+        try:
+            yield iter_[-1], None
+        except IndexError:
+            pass
