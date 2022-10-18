@@ -357,7 +357,7 @@ class IPrange:
             
             # Get start and end indexes from slice object
             start_index = other.start if other.start != None else 0
-            stop_index = other.stop if other.stop != None else len(self) - 1
+            stop_index = other.stop - 1 if other.stop != None else len(self) - 1
             if stop_index == len(self):
                 if self[stop_index-1] == IP(255,255,255,255):
                     stop_index -= 1
@@ -474,7 +474,7 @@ class ComplexIPrange:
             
             # Get start and end indexes from slice object
             start_index = other.start if other.start != None else 0
-            stop_index = other.stop if other.stop != None else len(self) - 1
+            stop_index = other.stop  - 1 if other.stop != None else len(self) - 1
             if stop_index == len(self):
                 if self[stop_index-1] == IP(255,255,255,255):
                     stop_index -= 1
