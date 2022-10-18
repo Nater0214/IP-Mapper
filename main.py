@@ -75,10 +75,9 @@ def main(settings: dict) -> None:
     # End threads and get thread results
     stats_thrd.end()
     ping_thrds.end()
-    results, pinged_range = transpose_iter(ping_thrds.join())
+    results, pinged_ranges = transpose_iter(ping_thrds.join())
 
     results = flatten_iter(results)
-    pinged_range = ComplexIPrange(pinged_range)
 
     # Divide up results
     results_subs = lazy_split(results, result_thread_amount)
@@ -116,7 +115,7 @@ def main(settings: dict) -> None:
     save_thrds.join()
     stats_thrd.end()
 
-    out = ComplexIPrange(pinged_range.ranges + (checked_ranges.ranges if checked_ranges != None else []))
+    out = ComplexIPrange(pinged_ranges + (checked_ranges.ranges if checked_ranges != None else []))
     with open("checked_ranges.txt", 'wt') as file:
         file.write(repr(out))
 
