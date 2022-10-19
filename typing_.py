@@ -1,4 +1,4 @@
-# typing.pyi
+# typing.py.
 # Contains dummy classes to make things look nicer
 
 
