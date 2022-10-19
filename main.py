@@ -95,7 +95,7 @@ def main(settings: dict) -> None:
     # Wait for threads to finish
     results_thrds.join()
 
-    # Create img ang out_num list
+    # Create img and out_num list
     imgs_n_out_nums = [(img, out_num+1) for out_num, img in enumerate(imgs)]
 
     # Divide up list
