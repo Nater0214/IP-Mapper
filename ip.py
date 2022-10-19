@@ -10,14 +10,13 @@ from collections.abc import Iterable
 from typing import Any
 
 from global_methods import isntinstance, iter_2_items
-from typing_ import IPOverflowError, IPValueError, OctetIndexError
+from typing_ import IndexTypeError, IPOverflowError, IPValueError, OctetIndexError
 
 
 # Definitions
 class IP:
     """An IP object"""
 
-    IP = object
 
     # Init
     def __init__(self, a: int, b: int, c: int, d: int, *, force_create=False) -> None:
@@ -334,38 +333,40 @@ class IPrange:
 
     # List-like methods
     def __getitem__(self, other: int | slice) -> IP | IPrange:
-        # Return IP at index
+        # Index
         if isinstance(other, int):
             # Positive index
             if other >= 0:
+                # Check for out of range index
                 if other > len(self) - 1:
                     raise IndexError(f"Index out of range: {other}")
                 
+                # Return IP
                 return self._start_ip + other
             
             # Negative index
             elif other < 0:
+                # Check for out of range index
                 if other < -len(self):
                     raise IndexError(f"Index out of range: {other}")
 
+                # Return IP
                 return self.stop_ip + other + 1
         
+        # Slice
         elif isinstance(other, slice): # Return IPrange with indexes
             # Raise exception if slice has step; It doesn't work
             if other.step != None:
                 raise IndexError("IPrange does not support stepped slicing")
             
-            # Get start and end indexes from slice object
+            # Get and adjust start and stop indexes from slice object
             start_index = other.start if other.start != None else 0
-            stop_index = other.stop - 1 if other.stop != None else len(self) - 1
+            stop_index = other.stop if other.stop != None else len(self) - 1
 
-            # Raise exception if slice is a reverse slice; It also doesn't work
-            if start_index > stop_index:
-                raise IndexError("IPrange does not support reverse slicing")
-            
             # Return IPrange with indexes
-            return IPrange(self[start_index], self[stop_index], no_stop_sub_1=True)
+            return IPrange(self[start_index], self[stop_index])
         
+        # Type Error
         else:
             raise IndexError(f"Unsupported index type for IPrange: {other.__class__.__name__}")
     
@@ -444,100 +445,55 @@ class ComplexIPrange:
 
     # List-like methods
     def __getitem__(self, other: int | slice) -> IP | IPrange | ComplexIPrange:
+        # Index
         if isinstance(other, int):
-            # Support negative indexing
-            if other < 0:
-                other = len(self) + other
+            # Positive index
+            if other >= 0:
+                # Get out range and index
+                og_other = other
+                out_range = None
+                for range_ in self._ranges:
+                    if other > ((len_ := len(range_)) - 1):
+                        other -= len_
+                    else:
+                        out_range = range_
+                        break
 
-            # Raise exception if index is out of range
-            if other > len(self):
-                raise IndexError(f"Index out of range: {other}")
-
-            for range_ in self._ranges:
-                if other > (len_ := len(range_)) - 1: # I <3 walrus operator. I rarely get to use it so im happy :D
-                    other -= len_
-                else:
-                    return range_[other] 
-
+                # Check for error
+                if out_range == None:
+                    raise IndexError(f"Index out of range: {og_other}")
+                
+                # Return IP
+                return out_range[other]
+            
+            # Negative index
+            elif other < 0:
+                # Get out range and index
+                og_other = other
+                out_range = None
+                for range_ in self._ranges[::-1]:
+                    if -other > ((len_ := len(range_)) - 1):
+                        other += len_
+                    else:
+                        out_range = range_
+                        break
+                
+                # Check for error
+                if out_range == None:
+                    raise IndexError(f"Index out of range: {og_other}")
+                
+                # Return IP
+                return out_range[other]
+        
+        # Slice
         elif isinstance(other, slice):
             # Raise exception if slice has step; It doesn't work
             if other.step != None:
                 raise IndexError("ComplexIPrange does not support stepped slicing")
-            
-            # Get start and end indexes from slice object
-            start_index = other.start if other.start != None else 0
-            stop_index = other.stop  - 1 if other.stop != None else len(self) - 1
-            if stop_index == len(self):
-                if self[stop_index-1] == IP(255,255,255,255):
-                    stop_index -= 1
-                    last_ip = True
-                else:
-                    last_ip = False
-            else:
-                last_ip = False
-
-            # Support negative indexing
-            if start_index < 0:
-                start_index = len(self) + start_index
-            if stop_index < 0:
-                stop_index = len(self) + stop_index
-            
-            # Raise exception if index is out of range
-            if start_index > len(self) - 1:
-                raise IndexError(f"Index out of range: {start_index}")
-            if start_index < 0:
-                raise IndexError(f"Index out of range: {start_index - len(self)}")
-            if stop_index > len(self) - 1:
-                raise IndexError(f"Index out of range: {stop_index}")
-            if stop_index < 0:
-                raise IndexError(f"Index out of range: {stop_index - len(self)}")
-
-            # Raise exception if slice is a reverse slice; It also doesn't work
-            if start_index > stop_index:
-                raise IndexError("ComplexIPrange does not support reverse slicing")
-
-            # Get start range and change start index appropriately
-            for range_index, range_ in enumerate(self._ranges):
-                if start_index > (len_ := len(range_)) - 1:
-                    start_index -= len_
-                else:
-                    start_range = range_
-                    start_range_index = range_index
-                    break
-
-            # Get stop range and change stop index appropriately
-            for range_index, range_ in enumerate(self._ranges):
-                if stop_index > (len_ := len(range_)) - 1:
-                    stop_index -= len_
-                else:
-                    stop_range = range_
-                    stop_range_index = range_index
-                    break
-
-            # If indexes are in same range return IPrange
-            if start_range == stop_range:
-                return IPrange(start_range[start_index], stop_range[stop_index], no_stop_sub_1=True)
-            
-            # Else return complex range
-            else:
-                # Create out list
-                out_ranges: list[IPrange] = []
-
-                # Append start range
-                out_ranges.append(start_range[start_index:])
-                
-                # Append middle ranges
-                for range_index in range(start_range_index + 1, stop_range_index):
-                    out_ranges.append(self._ranges[range_index])
-                
-                # Append stop range
-                out_ranges.append(stop_range[:stop_index+1])
-                out_ranges[-1]._no_stop_sub_1 = last_ip
-
-                return ComplexIPrange(out_ranges)
         
+        # Type Error
         else:
-            raise IndexError(f"Unsupported index type for ComplexIPrange: {other.__class__.__name__}")
+            raise IndexTypeError(f"Unsupported index type for ComplexIPrange: {other.__class__.__name__}")
     
 
     def __contains__(self, other: IP) -> bool:
