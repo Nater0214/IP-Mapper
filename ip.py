@@ -419,8 +419,10 @@ class IPrange:
     def __next__(self) -> IP:
         # Increment iter index
         self.iter_index += 1
-        
+
         # Stop iteration if end
+        if len(self) == 0:
+            raise StopIteration
         if self.stop_ip == self[self.iter_index]:
             raise StopIteration
 
