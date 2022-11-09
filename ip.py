@@ -464,11 +464,11 @@ class IPrange:
 
             # Get and adjust start and stop indexes from slice object
             start_index = og_start_index if other.start != None else 0
-            stop_index = og_stop_index if other.stop != None else -1
+            stop_index = og_stop_index if other.stop != None else len(self)
             
             # Return IPrange with indexes
             try:
-                return IPrange(self[start_index], self[stop_index])
+                return IPrange(self[start_index], self[-1] + 1 if stop_index == len(self) else self[stop_index])
 
             # Raise Slice Error if out of range
             except IndexError:
@@ -632,7 +632,7 @@ class ComplexIPrange:
 
             # Get start and stop indexes from slice object
             start_index = og_start_index if og_start_index != None else 0
-            stop_index = None if og_stop_index == 0 else og_stop_index - 1 if og_stop_index != None else len(self) - 1
+            stop_index = og_stop_index if og_stop_index != None else len(self)
 
             # Get ranges and indexes
             start_range = None
@@ -664,7 +664,7 @@ class ComplexIPrange:
             if stop_index >= 0:
                 # Get range and index
                 for range_ in self._ranges:
-                    if stop_index > ((len_ := len(range_)) - 1):
+                    if stop_index > (len_ := len(range_)):
                         stop_index -= len_
                     else:
                         stop_range = range_
@@ -674,7 +674,7 @@ class ComplexIPrange:
             elif stop_index < 0:
                 # Get range and index
                 for range_ in self._ranges[::-1]:
-                    if -stop_index > ((len_ := len(range_)) - 1):
+                    if -stop_index > (len_ := len(range_)):
                         stop_index += len_
                     else:
                         stop_range = range_
@@ -686,7 +686,7 @@ class ComplexIPrange:
 
             # If ranges are the same then return an IPrange
             if start_range == stop_range:
-                return IPrange(start_range[start_index], stop_range[stop_index])
+                return start_range[start_index:stop_index]
 
             # Else return a ComplexIPrange
             else:
