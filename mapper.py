@@ -12,20 +12,7 @@ from global_methods import flatten_iter, lazy_split, transpose_iter
 from ip import IP, ComplexIPrange, IPrange
 
 
-def load_settings() -> dict:
-    """Load the settings from the json"""
-
-    # Get json data
-    with open("settings.json", 'rt') as file:
-        json_data = json.load(file)
-    
-    # Return settings
-    if json_data["default_settings"]:
-        return json_data["default"]
-    else:
-        return json_data["user_defined"]
-
-
+# Definitions
 def main(settings: dict) -> None:
     """Main"""
 
