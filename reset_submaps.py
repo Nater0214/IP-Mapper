@@ -1,3 +1,8 @@
+# reset_submaps.py
+# Resets all the submaps
+
+
+# Imports
 from PIL import Image
 
 import threads
