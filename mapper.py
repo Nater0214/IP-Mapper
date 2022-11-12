@@ -3,7 +3,7 @@
 
 
 
-# Definitions
+# Imports
 import json
 
 import image
