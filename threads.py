@@ -88,8 +88,8 @@ class PingThread(ThreadWrap):
     # Thread methods
     def join(self) -> tuple[list[tuple[IP, bool]], IPrange]:
         super().join()
-        checked_range = IPrange(self.check_range[0], self.end_ip + 1)
-        return self.results, checked_range
+        
+        return self.results, self.checked_range
     
     
     # Function to be executed
@@ -111,6 +111,10 @@ class PingThread(ThreadWrap):
         
         # Set results of self
         self.results = results
+        
+        # Get checked range from results
+        bruh_ranges = [IPrange(ip, ip + 1) for ip, _ in self.results] # I could't think of a better name
+        self.checked_range = ComplexIPrange(bruh_ranges)
 
 
 class LoadThread(ThreadWrap):
