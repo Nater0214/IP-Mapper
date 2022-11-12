@@ -75,7 +75,8 @@ def main(settings: dict) -> None:
     # End threads and get thread results
     stats_thrd.end()
     ping_thrds.end()
-    results, pinged_ranges: list[IPrange | ComplexIPrange] = transpose_iter(ping_thrds.join())
+    results, pinged_ranges = transpose_iter(ping_thrds.join())
+    pinged_ranges: list[IPrange | ComplexIPrange]
 
     results = flatten_iter(results)
 
