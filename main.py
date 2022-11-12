@@ -117,7 +117,7 @@ def main(settings: dict) -> None:
     save_thrds.join()
     stats_thrd.end()
 
-    out_ranges = [range_.ranges if isinstance(range_, ComplexIPrange) else range_ for range_ in pinged_ranges] + (checked_ranges.ranges if checked_ranges != None else [])
+    out_ranges = flatten_iter([range_.ranges if isinstance(range_, ComplexIPrange) else [range_] for range_ in pinged_ranges] + [checked_ranges.ranges if checked_ranges != None else []])
     out = ComplexIPrange(out_ranges)
     with open("checked_ranges.txt", 'wt') as file:
         file.write(repr(out))
