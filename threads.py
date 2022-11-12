@@ -114,7 +114,7 @@ class PingThread(ThreadWrap):
         
         # Get checked range from results
         bruh_ranges = [IPrange(ip, ip + 1) for ip, _ in self.results] # I could't think of a better name
-        self.checked_range = ComplexIPrange(bruh_ranges)
+        self.checked_range = ComplexIPrange(bruh_ranges, _trust_contain = True)
 
 
 class LoadThread(ThreadWrap):

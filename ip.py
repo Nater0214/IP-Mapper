@@ -496,7 +496,7 @@ class ComplexIPrange:
     _ranges = []
 
     # Init
-    def __init__(self, ranges: list[IPrange]) -> None:
+    def __init__(self, ranges: list[IPrange], *, _trust_contain=False) -> None:
         """
         Creates a complex range of multiple IPranges
         
@@ -534,6 +534,9 @@ class ComplexIPrange:
         self._ranges = []
         for range_ in ranges:
             if self._ranges == []:
+                self._ranges.append(range_)
+            
+            elif _trust_contain:
                 self._ranges.append(range_)
 
             else:
