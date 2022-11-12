@@ -738,17 +738,20 @@ class ComplexIPrange:
 
             else:
                 new_ranges = []
+                merged_prev = False
                 for range1, range2 in iter_2_items(old_ranges, return_last=True):
                     if range2 == None:
-                        new_ranges.append(range1)
+                        if not merged_prev:
+                            new_ranges.append(range1)
 
                     elif range1[-1] + 1 == range2[0]:
                         new_ranges.append(IPrange(range1[0], range2[-1] + 1))
                         old_ranges.remove(range1)
-                        old_ranges.remove(range2)
+                        merged_prev = True
 
                     else:
                         new_ranges.append(range1)
+                        merged_prev = False
 
                 return new_ranges
 
