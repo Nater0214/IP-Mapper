@@ -38,7 +38,6 @@ def main() -> None:
         file.write("None")
 
 
-
 # Run
 if __name__ == '__main__':
     main()
