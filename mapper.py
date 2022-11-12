@@ -7,6 +7,7 @@
 import json
 
 import image
+import settings
 import threads
 from global_methods import flatten_iter, lazy_split, transpose_iter
 from ip import IP, ComplexIPrange, IPrange
@@ -107,5 +108,5 @@ def main(settings: dict) -> None:
 
 # Run
 if __name__ == "__main__":
-    settings = load_settings()
+    settings = settings.load_settings()
     main(settings)
