@@ -10,7 +10,7 @@ from listb1 import Listb1
 
 
 # Definitions
-def main():
+def main() -> None:
     # Open all the images
     imgs = Listb1(get_images())
 
