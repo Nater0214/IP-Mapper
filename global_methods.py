@@ -5,26 +5,42 @@
 
 # Imports
 from collections.abc import Iterable
-from itertools import chain, groupby
-from typing import Any
-
-from numpy import transpose, array
+from itertools import chain, groupby, tee
+from typing import Any, Generator
 
 
 # Definitions
+class staticproperty(staticmethod):
+    def __get__(self, *_):         
+        return self.__func__()
+    
+    
 def isntinstance(object_: object, type_: type | tuple[type]) -> bool:
     """
-    Short code for:
-    >>> if not isinstance(obj, type_):
+    Short for not isinstance()
+    I just got tired of typing:
+    >>> if not isinstance(obj_, type_):
     ...     pass
-
-    I just got tired of typing the above so I made this.
+    So I made this
+    
+    Returns:
+        bool # The opposite of isinstance(obj_, type_)
+    
+    Usage:
+    >>> var1 = 1
+    >>> var2 = '1'
+    
+    isntinstance(var1, int)
+    False
+    isntinstance(var2, int)
+    True
     """
-
+    
     return not isinstance(object_, type_)
 
 
 def lazy_split(iter_: Iterable, split_num: int) -> list[Iterable]:
+    
     """
     Splits an iterable lazily as not to use memory and computational power to store full list.
     Attempts to slice the iterable rather than actually iterating over it.
@@ -82,21 +98,27 @@ def transpose_iter(iter_: Iterable[Iterable]) -> Iterable[Iterable]:
     Transposes a 2d iterable into an instance of itself.
     Output types will be switched, so that the inner type is now the outer, and vice-versa.
 
-
     Usage:
-    >>> iter_ = [[1, 2], [3, 4]]
+    >>> iter_ = [(1, 2), (3, 4), (5, 6)]
     >>> transpose_iter(iter_)
-    [[1, 3], [2, 4]]
+    ([1, 3, 5], [2, 4, 6])
     """
-
-    # Get iter classes
+    
+    # Get classes
     out_cls = iter_.__class__
     if not all_same_type(iter_):
-        raise TypeError("Inner iterables must all be the same type")
+        raise TypeError("Inner iterables must have the same type")
     in_cls = iter_[0].__class__
-
-    # Return
-    return in_cls([out_cls(item) for item in transpose(array(iter_, dtype=object))])
+    
+    # Make sure all inner iterables have the same length
+    if not all_equal([len(inner_iter) for inner_iter in iter_]):
+        raise ValueError("Inner iterables must have the same length")
+    
+    out = []
+    for i in range(len(iter_[0])):
+        out.append(out_cls([inner_iter[i] for inner_iter in iter_]))
+    
+    return in_cls(out)
 
 
 def all_same_type(iter_: Iterable[Any]) -> bool:
@@ -116,10 +138,25 @@ def all_same_type(iter_: Iterable[Any]) -> bool:
     return all_equal(types)
 
 
-def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> tuple[Any, Any]:
+def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> Any:
     """
-    Generates an iterable that returns an item and the item directly after it
-    """
+    Yields an item from an iterable and the item after it
+    
+    Parameters:
+        iter_: Iterable[Any] # The iterable to yield from
+        return_last: bool = False # Return the last item of the iterable, along with None
+    
+    Yields:
+        tuple[Any, Any] # The two elements of the iterable
+    
+    Usage:
+    l = [1, 2, 3, 4]
+    >>> for n in iter_2_items(l):
+    ...     print(n)
+    [1, 2]
+    [2, 3]
+    [3, 4]
+    """    
     
     i = 0
     while i < len(iter_) - 1:

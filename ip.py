@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Any
 
-from global_methods import isntinstance, iter_2_items
+from global_methods import isntinstance, iter_2_items, staticproperty
 from typing_ import IndexTypeError, IPOverflowError, IPValueError, OctetIndexError, SliceError
 
 
@@ -91,8 +91,7 @@ class IP:
         return IP(0,0,0,0) + other
     
     
-    @staticmethod
-    @property
+    @staticproperty
     def last_ip() -> IP:
         """
         Returns a dummy last IP
@@ -468,7 +467,7 @@ class IPrange:
             
             # Return IPrange with indexes
             try:
-                return IPrange(self[start_index], self[-1] + 1 if stop_index == len(self) else self[stop_index])
+                return IPrange(self[start_index], self._stop_ip if stop_index == len(self) else self[stop_index])
 
             # Raise Slice Error if out of range
             except IndexError:

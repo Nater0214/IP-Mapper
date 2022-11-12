@@ -1,5 +1,5 @@
 {
-    "default_settings": true,
+    "default_settings": false,
     "default": {
         "thread_amounts": {
             "ping_thread_amount": 8,

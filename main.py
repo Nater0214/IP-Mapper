@@ -52,7 +52,7 @@ def main(settings: dict) -> None:
         checked_ranges = None
     
     if checked_ranges == None:
-        ping_range = IPrange(IP(0, 0, 0, 0), IP(255, 255, 255, 255), no_stop_sub_1=True)
+        ping_range = IPrange(IP(0,0,0,0), IP.last_ip)
     else:
         ping_range = checked_ranges.inverted()
     
