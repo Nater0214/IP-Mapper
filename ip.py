@@ -608,7 +608,7 @@ class ComplexIPrange:
                 og_other = other
                 out_range = None
                 for range_ in self._ranges[::-1]:
-                    if -other > ((len_ := len(range_)) - 1):
+                    if -other > (len_ := len(range_)):
                         other += len_
                     else:
                         out_range = range_
@@ -735,7 +735,7 @@ class ComplexIPrange:
 
             else:
                 new_ranges = []
-                for range1, range2 in iter_2_items(old_ranges, True):
+                for range1, range2 in iter_2_items(old_ranges, return_last=True):
                     if range2 == None:
                         new_ranges.append(range1)
 
