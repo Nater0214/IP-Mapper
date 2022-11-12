@@ -528,7 +528,7 @@ class ComplexIPrange:
                 raise TypeError(f"Range type must be IPrange, not {range_.__class__.__name__}")
 
         # Sort ranges
-        ranges = sorted(ranges, key=lambda r: r[0])
+        ranges = sorted(ranges, key=lambda r: r.start_ip)
         
         # Add ranges one-by-one and check if any contain each other
         self._ranges = []
