@@ -106,7 +106,10 @@ class PingThread(ThreadWrap):
                 self.end_ip = ip
                 break
         
+        # Set finished stat to true
         self.is_finished = True
+        
+        # Set results of self
         self.results = results
 
 
