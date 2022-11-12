@@ -527,6 +527,9 @@ class ComplexIPrange:
             if isntinstance(range_, IPrange):
                 raise TypeError(f"Range type must be IPrange, not {range_.__class__.__name__}")
 
+        # Sort ranges
+        ranges = sorted(ranges, key=lambda r: r[0])
+        
         # Add ranges one-by-one and check if any contain each other
         self._ranges = []
         for range_ in ranges:
@@ -539,8 +542,7 @@ class ComplexIPrange:
                 else:
                     self._ranges.append(range_)
 
-        self._ranges = sorted(self._ranges, key=lambda r: r[0])
-
+        # Merge ranges if possible
         self._merge()
 
 
