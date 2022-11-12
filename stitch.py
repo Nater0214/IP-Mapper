@@ -8,8 +8,9 @@ from PIL import Image
 from image import get_images
 from listb1 import Listb1
 
-# Run
-if __name__ == "__main__":
+
+# Definitions
+def main():
     # Open all the images
     imgs = Listb1(get_images())
 
@@ -25,3 +26,7 @@ if __name__ == "__main__":
     # Save the big map
     print("Saving map...")
     big_map.save("map.png")
+
+# Run
+if __name__ == "__main__":
+    main()
