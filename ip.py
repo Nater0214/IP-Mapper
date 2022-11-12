@@ -770,13 +770,13 @@ class ComplexIPrange:
         """
 
         out_ranges = []
-        if self._ranges[0][0] != IP(0,0,0,0):
+        if self._ranges[0].start_ip != IP(0,0,0,0):
             out_ranges.append(IPrange(IP(0,0,0,0), self._ranges[0][0]))
 
         for range1, range2 in iter_2_items(self._ranges):
-            out_ranges.append(IPrange(range1[-1]+1, range2[0]))
+            out_ranges.append(IPrange(range1[-1] + 1, range2[0]))
 
-        if self._ranges[-1][-1] != IP(255,255,255,255):
-            out_ranges.append(IPrange(self._ranges[-1][-1]+1, IP.last_ip))
+        if self._ranges[-1].stop_ip != IP.last_ip:
+            out_ranges.append(IPrange(self._ranges[-1][-1] + 1, IP.last_ip))
 
         return ComplexIPrange(out_ranges)
