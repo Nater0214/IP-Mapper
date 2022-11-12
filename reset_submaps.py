@@ -3,28 +3,37 @@ from PIL import Image
 import threads
 from global_methods import lazy_split
 
-imgs = [Image.new(mode='RGB', size=(8192,8192), color=(18,18,18)) for _ in range(64)]
 
-# Create img and out_num list
-imgs_n_out_nums = [(img, out_num+1) for out_num, img in enumerate(imgs)]
+# Definitions
+def main() -> None:
+    imgs = [Image.new(mode='RGB', size=(8192,8192), color=(18,18,18)) for _ in range(64)]
 
-# Divide up list
-imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, 32)
+    # Create img and out_num list
+    imgs_n_out_nums = [(img, out_num+1) for out_num, img in enumerate(imgs)]
 
-# Create save threads
-save_thrds = threads.ThreadsList([threads.SaveThread(imgs_n_out_nums_sub, num+1) for num, imgs_n_out_nums_sub in enumerate(imgs_n_out_nums_subs)])
+    # Divide up list
+    imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, 32)
 
-# Create stats thread
-stats_thrd = threads.StatsThread(save_thrds)
+    # Create save threads
+    save_thrds = threads.ThreadsList([threads.SaveThread(imgs_n_out_nums_sub, num+1) for num, imgs_n_out_nums_sub in enumerate(imgs_n_out_nums_subs)])
 
-# Start threads
-stats_thrd.start()
-save_thrds.start()
+    # Create stats thread
+    stats_thrd = threads.StatsThread(save_thrds)
 
-# Wait for threads to finish
-save_thrds.join()
-stats_thrd.end()
+    # Start threads
+    stats_thrd.start()
+    save_thrds.start()
 
-# Reset checked ranges
-with open("checked_ranges.txt", 'wt') as file:
-    file.write("None")
+    # Wait for threads to finish
+    save_thrds.join()
+    stats_thrd.end()
+
+    # Reset checked ranges
+    with open("checked_ranges.txt", 'wt') as file:
+        file.write("None")
+
+
+
+# Run
+if __name__ == '__main__':
+    main()
