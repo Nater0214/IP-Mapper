@@ -6,6 +6,14 @@
 
 
 # Definitions
+START_MESSAGE = """Welcome to IP mapper:
+Please select one of the following options:
+1) Map IPs
+2) Stitch Map together
+3) Reset all maps
+4) Change settings"""
+
+
 def main() -> None:
     
     
