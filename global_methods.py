@@ -138,7 +138,7 @@ def all_same_type(iter_: Iterable[Any]) -> bool:
     return all_equal(types)
 
 
-def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> Any:
+def iter_2_items(iter_: Iterable[Any], *, return_last: bool = False) -> tuple[Any, Any]:
     """
     Yields an item from an iterable and the item after it
     
@@ -151,12 +151,12 @@ def iter_2_items(iter_: Iterable[Any], return_last: bool = False) -> Any:
     
     Usage:
     l = [1, 2, 3, 4]
-    >>> for n in iter_2_items(l):
-    ...     print(n)
-    [1, 2]
-    [2, 3]
-    [3, 4]
-    """    
+    >>> for n, m in iter_2_items(l):
+    ...     print(n, m)
+    1 2
+    2 3
+    3 4
+    """
     
     i = 0
     while i < len(iter_) - 1:
