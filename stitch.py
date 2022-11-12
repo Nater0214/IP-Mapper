@@ -4,13 +4,14 @@
 
 # Imports
 from PIL import Image
-from listb1 import Listb1
 
+from image import get_images
+from listb1 import Listb1
 
 # Run
 if __name__ == "__main__":
     # Open all the images
-    imgs = Listb1([Image.open(f"maps\\map{i}.png") for i in range(1, 65)])
+    imgs = Listb1(get_images())
 
     # Initialize big map
     big_map = Image.new('RGB', (65536, 65536))
