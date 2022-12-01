@@ -18,11 +18,16 @@ def main(settings: dict) -> None:
     """Main"""
 
     # Set thread amounts
-    thread_amounts = settings["thread_amounts"]
-    ping_thread_amount = thread_amounts["ping_thread_amount"]
-    load_thread_amount = thread_amounts["load_thread_amount"]
-    result_thread_amount = thread_amounts["result_thread_amount"]
-    save_thread_amount = thread_amounts["save_thread_amount"]
+    thread_amounts = {}
+    if settings["default_settings"]:
+        thread_amounts = settings["default"]["thread_amounts"]
+    else:
+        thread_amounts = settings["user_defined"]["thread_amounts"]
+    
+    ping_thread_amount = thread_amounts["ping"]
+    load_thread_amount = thread_amounts["load"]
+    result_thread_amount = thread_amounts["result"]
+    save_thread_amount = thread_amounts["save"]
 
     # Get last checked ips
     try:

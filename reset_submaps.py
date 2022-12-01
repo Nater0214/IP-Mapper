@@ -5,19 +5,28 @@
 # Imports
 from PIL import Image
 
+import settings
 import threads
 from global_methods import lazy_split
 
 
 # Definitions
 def main() -> None:
+    print("Creating images...")
     imgs = [Image.new(mode='RGB', size=(8192,8192), color=(18,18,18)) for _ in range(64)]
 
     # Create img and out_num list
     imgs_n_out_nums = [(img, out_num+1) for out_num, img in enumerate(imgs)]
 
     # Divide up list
-    imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, 32)
+    settings_ = settings.load_settings()
+    thrd_amount = 0
+    if settings_["default_settings"]:
+        thrd_amount = settings_["default"]["thread_amounts"]["save"]
+    else:
+        thrd_amount = settings_["user_defined"]["thread_amounts"]["save"]
+    
+    imgs_n_out_nums_subs = lazy_split(imgs_n_out_nums, thrd_amount)
 
     # Create save threads
     save_thrds = threads.ThreadsList([threads.SaveThread(imgs_n_out_nums_sub, num+1) for num, imgs_n_out_nums_sub in enumerate(imgs_n_out_nums_subs)])

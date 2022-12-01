@@ -1,7 +1,9 @@
 __pycache__
+.pytest_cache
 .vscode
 maps/*
 checked_ranges.txt
 map.png
 **/[Tt]est*
 coord_to_ip.py
+release

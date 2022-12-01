@@ -11,6 +11,7 @@ import reset_submaps
 import settings
 import stitch
 
+
 # Definitions
 START_MESSAGE = """Welcome to IP mapper!
 Please select one of the following options:
@@ -30,15 +31,15 @@ def main() -> None:
         
         # Mapper
         case '1':
-            settings = mapper.load_settings()
-            mapper.main(settings)
+            settings_ = settings.load_settings()
+            mapper.main(settings_)
         
         # Stitch
         case '2':
             stitch.main()
         
         # Reset submaps
-        case 3:
+        case '3':
             reset_submaps.main()
 
         # Change settings
