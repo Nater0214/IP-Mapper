@@ -61,15 +61,17 @@ def main():
                 thread_amounts = settings["user_defined"]["thread_amounts"]
                 print(f"Current user defined thread amounts are:\nPing: {thread_amounts['ping']}\nLoad: {thread_amounts['load']}\nResult: {thread_amounts['result']}\nSave: {thread_amounts['save']}")
 
+                # Get thread and amount
                 while True:
                     inp = input("Input the name of the amount you want to change, followed with a space by the amount: ")
                     
+                    # Split command
                     cmd = inp.split(' ')
                     cmd[0] = cmd[0].lower()
                     if len(cmd) == 2:
                         cmd[1] = int(cmd[1])
                     
-                    nvm = False
+                    nvm = False # True if the user inputs 'nvm'
                     match cmd:
                         case ['ping', num]:
                             thread_amounts['ping'] = num
@@ -95,7 +97,8 @@ def main():
                         case other:
                             print("What?")
                 
-                if not nvm:
+                # Change settings
+                if not nvm: # Dont change when user input 'nvm'
                     print(f"Changed {cmd[0].capitalize()} to {cmd[1]}")
                     settings["user_defined"]["thread_amounts"] = thread_amounts
             
