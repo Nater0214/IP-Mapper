@@ -5,9 +5,9 @@
 # Imports
 from PIL import Image
 
-import settings
-import threads
-from global_methods import lazy_split
+import src.settings as settings
+import src.threads as threads
+from src.global_methods import lazy_split
 
 
 # Definitions

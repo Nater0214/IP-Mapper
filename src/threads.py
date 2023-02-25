@@ -13,10 +13,10 @@ from typing import Any
 from PIL.PngImagePlugin import PngImageFile
 from PIL.PyAccess import PyAccess
 
-import image
-from global_methods import all_equal, all_same_type, isntinstance
-from ip import IP, ComplexIPrange, IPrange
-from ping import ping
+import src.image as image
+from src.global_methods import all_equal, all_same_type, isntinstance
+from src.ip import IP, ComplexIPrange, IPrange
+from src.ping import ping
 
 
 # Definitions   

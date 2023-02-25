@@ -6,11 +6,11 @@
 # Imports
 import json
 
-import image
-import settings
-import threads
-from global_methods import flatten_iter, lazy_split, transpose_iter
-from ip import IP, ComplexIPrange, IPrange
+import src.image as image
+import src.settings as settings
+import src.threads as threads
+from src.global_methods import flatten_iter, lazy_split, transpose_iter
+from src.ip import IP, ComplexIPrange, IPrange
 
 
 # Definitions

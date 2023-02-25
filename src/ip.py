@@ -9,8 +9,8 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Any
 
-from global_methods import isntinstance, iter_2_items, staticproperty
-from typing_ import IndexTypeError, IPOverflowError, IPValueError, OctetIndexError, SliceError
+from src.global_methods import isntinstance, iter_2_items, staticproperty
+from src.typing_ import IndexTypeError, IPOverflowError, IPValueError, OctetIndexError, SliceError
 
 
 # Definitions

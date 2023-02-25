@@ -5,7 +5,7 @@
 # Imports
 from ping3 import ping as ping_
 
-from ip import IP
+from src.ip import IP
 
 
 # Definitions

@@ -6,10 +6,10 @@
 
 
 # Imports
-import mapper
-import reset_submaps
-import settings
-import stitch
+import src.mapper
+import src.reset_submaps
+import src.settings
+import src.stitch
 
 
 # Definitions

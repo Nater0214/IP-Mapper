@@ -5,8 +5,8 @@
 # Imports
 from PIL import Image
 
-from image import get_images
-from listb1 import Listb1
+from src.image import get_images
+from src.listb1 import Listb1
 
 
 # Definitions

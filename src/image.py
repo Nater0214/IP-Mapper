@@ -7,9 +7,9 @@ from PIL import Image
 from PIL.PngImagePlugin import PngImageFile
 from PIL.PyAccess import PyAccess
 
-import threads
-from global_methods import flatten_iter, lazy_split
-from ip import IP
+import src.threads as threads
+from src.global_methods import flatten_iter, lazy_split
+from src.ip import IP
 
 
 # Definitions
