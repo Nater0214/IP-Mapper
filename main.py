@@ -13,7 +13,8 @@ import src.stitch
 
 
 # Definitions
-START_MESSAGE = """Welcome to IP mapper!
+START_MESSAGE =\
+"""Welcome to IP mapper!
 Please select one of the following options:
 1) Map IPs
 2) Stitch Map together
